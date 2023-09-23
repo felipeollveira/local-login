@@ -1,10 +1,23 @@
 const express = require('express');
+const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
+
 const passport = require('passport');
-const session = require('express-session');
 
 const app = express();
+
+// Inicializa o Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Configuração da sessão
+app.use(session({
+    secret: '123',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 30 * 60 * 1000 }
+}));
 
 require('../auth')(passport);
 
@@ -23,17 +36,6 @@ const static_js = path.join(__dirname, '../script');
 app.use(express.static(static_css));
 app.use(express.static(static_js));
 
-// Inicializa o Passport.js
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Configuração da sessão
-app.use(session({
-    secret: '123',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 30 * 60 * 1000 }
-}));
 
 // Middleware de tratamento de erros
 app.use((err, req, res, next) => {
@@ -74,3 +76,5 @@ app.post('/login', passport.authenticate('local', {
     successRedirect: '/home',
     failureRedirect: '/login?fail=true'
 }));
+
+module.exports = app;
