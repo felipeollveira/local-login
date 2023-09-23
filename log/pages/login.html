@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+  <html lang="pt">
+  <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="icon" href="/img/favicon" type="image/x-icon">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" crossorigin="">
+
+
+     <link rel="stylesheet" type="text/css"  href="/css/styles.css">
+     
+     <title>CMS</title>
+  </head>
+  <body>
+     <div class="login" id="root">
+
+
+           <img src="https://wallpapercave.com/wp/wp2337079.jpg" alt="image" class="login__bg">
+           
+           <form action="/login" method="POST" class="login__form" id="loginForm">
+              <h1 class="login__title">Login</h1>
+              
+              <div class="login__inputs">
+              <div class="login__box">
+                 <input type="text" placeholder="ID user" name="id" autocomplete="off" required class="login__input" maxlength="5" id="logid">
+                 <i class="ri-key-fill"></i>
+              </div>
+
+              <div class="login__box">
+                 <input type="password" placeholder="Senha" name="password" required class="login__input" id="logpassword">
+                 <i class="ri-lock-2-fill"></i> 
+              </div>
+           </div>           
+               
+           <button class="login__button" type="submit">Login</button>
+           
+        </form>
+
+     </div>
+     
+    
+     <script type="text/javascript" src="/log.js"></script>
+  </body>
+  </html>
