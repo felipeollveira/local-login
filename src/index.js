@@ -7,13 +7,21 @@ const saltRounds = 10;
 const fs = require('fs');
 const path = require('path');
 
+require('dotenv').config()
+
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
+app.use(express.static('./src/public/'));
+app.use(express.static('src/public/views'));
+app.use(session({ secret: process.env.private_key, resave: true, saveUninitialized: true }));
 
-// Simulação de banco de dados como array
-const users = [];
+// Simulação de banco de dados c array
+const users = [
+  {
+    login: 'f',
+    senha: '$2b$10$xHRuWobhu/QHIOmArToEwe/SuQe42ExVqINo..Bu73iZOHftNHPpm'
+  }
+];
 
 // Rota GET para a página inicial
 app.get('/', (req, res) => {
@@ -30,7 +38,15 @@ app.get('/', (req, res) => {
 
 // Rota GET para o registro de usuários
 app.get('/cadastrar', (req, res) => {
-  res.render('cadastrar.ejs');
+  const loginPath = path.join(__dirname, '/views/cadastrar.html');
+  fs.readFile(loginPath, 'utf8', (err, login) => {
+      if (err) {
+          console.error(err);
+          res.status(500).send('Erro interno do servidor');
+          return;
+      }
+      res.send(login);
+  });
 });
 
 // Rota POST para o registro de usuários
@@ -49,6 +65,7 @@ app.post('/cadastrar', async (req, res) => {
     const hashedPassword = await bcrypt.hash(senha, saltRounds);
     const newUser = { login, senha: hashedPassword };
     users.push(newUser);
+    console.log(users)
     console.log('Usuário cadastrado com sucesso!');
     res.redirect('/');
   }
@@ -71,17 +88,34 @@ app.post('/', async (req, res) => {
   }
 });
 
+
 // Rota GET para página inicial após o login
 app.get('/homeInicial', (req, res) => {
   if (req.session.logado) {
-    res.render('homeInicial.ejs', { loginNome: req.session.login });
+    const loginPath = path.join(__dirname, '/views/homeInicial.html');
+    
+    // Lê o arquivo HTML
+    fs.readFile(loginPath, 'utf8', (err, login) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Erro interno do servidor');
+        return;
+      }
+      
+      // Substitui placeholders no HTML com os dados da sessão
+      //login = login.replace('{{loginNome}}', req.session.login);
+
+      // Envia o HTML renderizado como resposta
+      res.send(login);
+    });
   } else {
     res.redirect('/');
   }
 });
 
+
 // Inicie o servidor
-const PORT = process.env.PORT || 3000; // Use a variável de ambiente PORT, se definida
+const PORT = process.env.PORT || 3000; 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado na porta ${PORT}`);
 });
