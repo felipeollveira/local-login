@@ -1,28 +1,12 @@
 const express = require('express');
-const app = express();
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
-const fs = require('fs');
-const path = require('path');
+const root = require('./rotas');
+const server = express();
+server.use(express.json())
 
-require('dotenv').config()
+server.use(root)
 
-// Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('./src/public/'));
-app.use(express.static('src/public/views'));
-app.use(session({ secret: process.env.private_key, resave: true, saveUninitialized: true }));
 
-// Simulação de banco de dados c array
-const users = [
-  {
-    login: 'f',
-    senha: '$2b$10$xHRuWobhu/QHIOmArToEwe/SuQe42ExVqINo..Bu73iZOHftNHPpm'
-  }
-];
-
+/*
 // Rota GET para a página inicial
 app.get('/', (req, res) => {
   const loginPath = path.join(__dirname, '/views/login.html');
@@ -112,10 +96,10 @@ app.get('/homeInicial', (req, res) => {
     res.redirect('/');
   }
 });
-
+*/
 
 // Inicie o servidor
 const PORT = process.env.PORT || 3000; 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Servidor iniciado na porta ${PORT}`);
 });
