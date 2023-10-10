@@ -6,8 +6,8 @@ const server = express();
 server.use(session({ secret: process.env.private_key, resave: true, saveUninitialized: true }));
 
 
-server.use(express.static('../src/public/'));
-server.use(express.static('../public'));
+server.use(express.static(__dirname + '/public'));
+console.log(__dirname)
 
 server.use(express.json())
 server.use(root)

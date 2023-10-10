@@ -10,7 +10,7 @@
     "dev": "nodemon src/index.js"
   },
   "name": "login",
-  "description": "Sistema de login desenvolvido utilizando Express. ",
+  "description": "Sistema de login utilizando Express. ",
   "version": "1.0.0",
   "main": "index.js",
   "repository": {

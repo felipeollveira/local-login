@@ -1,6 +1,5 @@
 const express = require('express');
 const srv = express();
-const session = require('express-session');
 
 const fs = require('fs');
 const path = require('path');
@@ -10,8 +9,7 @@ const saltRounds = 10;
 
 require('dotenv').config();
 
-srv.use(express.static('../src/public/'));
-srv.use(express.static('/views/public'));
+
 
 
 const users = [
