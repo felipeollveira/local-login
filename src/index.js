@@ -7,13 +7,14 @@ server.use(session({ secret: process.env.private_key, resave: true, saveUninitia
 
 
 server.use(express.static(__dirname + '/public'));
-console.log(__dirname)
-
 server.use(express.json())
-server.use(root)
+
+server.use(root) // rotas
 
 // Iniciand o servidor
 const PORT = process.env.PORT || 3000; 
 server.listen(PORT, () => {
-  console.log(`Servidor iniciado em http://localhost:${PORT}/`);
+  console.log(`Servidor iniciado na porta ${PORT}`);
 });
+
+console.log(`http://localhost:${PORT}/`)

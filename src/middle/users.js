@@ -1,5 +1,3 @@
-const express = require('express');
-const srv = express();
 
 const fs = require('fs');
 const path = require('path');
@@ -11,16 +9,14 @@ require('dotenv').config();
 
 
 
-
 const users = [
     {
-      login: 'f',
-      senha: '$2b$10$xHRuWobhu/QHIOmArToEwe/SuQe42ExVqINo..Bu73iZOHftNHPpm'
+      login: 'adm',
+      senha: '$2b$10$8Vpdl8oKP2AEnWstMCzcqOPcB24sVLaCbsNRU0kFWjyqhi0HR9mq6'
     }
   ];
 
 
-// Rota GET para a página inicial
 const loginPage = (req, res) => {
   if( req.session.logado === true) res.redirect('/homeInicial')
   else{
@@ -37,7 +33,7 @@ const loginPage = (req, res) => {
   }
   };
 
-  // Rota POST para login
+
 const autLogin = async (req, res) => {
   try {
       const login = await req.body.login;
@@ -48,17 +44,18 @@ const autLogin = async (req, res) => {
       if (user && (await bcrypt.compare(senha, user.senha))) {
         req.session.logado = true;
         req.session.login = login;
-        console.log(req.session.logado, req.session.login);
+        //console.log(req.session.login);
         res.status(200).redirect('/homeInicial')
       } else {
         res.redirect('/');
       }
   } catch (error) {
-   console.log(error)   
+    console.error({message: 'Erro interno'})  
+     return res.status(401); 
   }};
 
   
-// Rota GET para o registro de usuários
+
 const registerPage = (req, res) => {
     const loginPath = path.join(__dirname, '../views/cadastrar.html');
     fs.readFile(loginPath, 'utf8', (err, login) => {
@@ -71,12 +68,15 @@ const registerPage = (req, res) => {
     });
   };
   
-// Rota POST para o registro de usuários
+
 const register = async (req, res) => {
     const login = req.body.login;
     const senha = req.body.senha;
    try {
-       // Hash da senha antes de armazenar no banco de dados (array)
+    const user = users.find((user) => user.login === login);
+    if (user)return res.status(401).redirect('/cadastrar');
+
+       // Hash da swnha
        const hashedPassword = await bcrypt.hash(senha, saltRounds);
        const newUser = { login, senha: hashedPassword };
        users.push(newUser);
@@ -90,10 +90,6 @@ const register = async (req, res) => {
 }
   
 
-
-  
-  
-// Rota GET para página inicial após o login
 const homePage =  (req, res) => {
     if (req.session.logado) {
       const loginPath = path.join(__dirname, '../views/homeInicial.html');
