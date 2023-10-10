@@ -80,7 +80,7 @@ const register = async (req, res) => {
        const hashedPassword = await bcrypt.hash(senha, saltRounds);
        const newUser = { login, senha: hashedPassword };
        users.push(newUser);
-       console.log(users)
+       //console.log(users)
        console.log('Usuário cadastrado com sucesso!');
        res.status(204).redirect('/');
    
